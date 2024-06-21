@@ -97,10 +97,10 @@ public class UserServiceImpl implements UserService {
         switch (user.getRole().getDescription()) {
             case "Manager":
                 List<ProjectDTO> projectDTOList = projectService.readAllByAssignedManager(user);
-                return projectDTOList.size() == 0;
+                return projectDTOList.isEmpty();
             case "Employee":
                 List<TaskDTO> taskDTOList = taskService.readAllByAssignedEmployee(user);
-                return taskDTOList.size() == 0;
+                return taskDTOList.isEmpty();
             default:
                 return true;
         }
