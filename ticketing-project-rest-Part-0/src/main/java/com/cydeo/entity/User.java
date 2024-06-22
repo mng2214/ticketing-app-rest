@@ -1,10 +1,11 @@
 package com.cydeo.entity;
 
 import com.cydeo.enums.Gender;
-import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
+
+import javax.persistence.*;
 
 @NoArgsConstructor
 @Data

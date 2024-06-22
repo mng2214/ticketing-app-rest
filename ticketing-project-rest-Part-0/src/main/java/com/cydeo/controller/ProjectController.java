@@ -5,13 +5,14 @@ import com.cydeo.entity.Project;
 import com.cydeo.entity.ResponseWrapper;
 import com.cydeo.service.ProjectService;
 import com.cydeo.service.UserService;
-import jakarta.annotation.security.RolesAllowed;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 @AllArgsConstructor

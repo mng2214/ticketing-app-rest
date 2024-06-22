@@ -3,12 +3,12 @@ package com.cydeo.controller;
 import com.cydeo.dto.UserDTO;
 import com.cydeo.entity.ResponseWrapper;
 import com.cydeo.service.UserService;
-import jakarta.annotation.security.RolesAllowed;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 @AllArgsConstructor
@@ -19,7 +19,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    @RolesAllowed({"Admin"})
+    @RolesAllowed("Admin")
     public ResponseEntity<ResponseWrapper> getUsers(){
         List<UserDTO> userDTOList = userService.listAllUsers();
         return ResponseEntity.ok(new ResponseWrapper("Users are successfully retrieved",userDTOList, HttpStatus.OK));
@@ -47,7 +47,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userName}")
-
+    @RolesAllowed({"Admin"})
     public ResponseEntity<ResponseWrapper> deleteUser(@PathVariable("userName") String userName){
         userService.deleteByUserName(userName);
         return ResponseEntity.ok(new ResponseWrapper("User is successfully deleted",HttpStatus.OK));

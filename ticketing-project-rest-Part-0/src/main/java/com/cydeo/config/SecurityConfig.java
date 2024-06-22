@@ -11,18 +11,23 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.core.session.SessionRegistryImpl;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
-public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
+public class SecurityConfig  extends KeycloakWebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        super.configure(http);
+        http.authorizeRequests().anyRequest().permitAll();
+        http.csrf().disable();
+    }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -32,33 +37,9 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public KeycloakConfigResolver keycloakConfigResolver() {
-        return new KeycloakSpringBootConfigResolver();
-    }
-
-    @Bean
     @Override
     protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
         return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
-    }
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests(authorize -> authorize
-                        .anyRequest().permitAll()
-                )
-                .csrf(csrf -> csrf.disable());
-        return http.build();
-    }
-
-    @Override
-    public void init(WebSecurity builder) throws Exception {
-        // Custom initialization logic can be added here if needed
-    }
-
-    @Override
-    public void configure(WebSecurity builder) throws Exception {
-        // Custom web security configuration can be added here if needed
     }
 
     @Bean
