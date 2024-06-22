@@ -18,33 +18,36 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<ResponseWrapper> getAllUsers() {
-        List<UserDTO> listOfUsers = userService.listAllUsers();
-        return ResponseEntity.ok(new ResponseWrapper("Users successfully retrieved", listOfUsers, HttpStatus.OK));
+    public ResponseEntity<ResponseWrapper> getUsers(){
+        List<UserDTO> userDTOList = userService.listAllUsers();
+        return ResponseEntity.ok(new ResponseWrapper("Users are successfully retrieved",userDTOList, HttpStatus.OK));
     }
 
     @GetMapping("/{userName}")
-    public ResponseEntity<ResponseWrapper> getUser(@PathVariable("userName") String userName) {
-        UserDTO foundByUserName = userService.findByUserName(userName);
-        return ResponseEntity.ok(new ResponseWrapper("User found", foundByUserName, HttpStatus.FOUND));
+    public ResponseEntity<ResponseWrapper> getUserByUserName(@PathVariable("userName") String userName){
+        UserDTO user = userService.findByUserName(userName);
+        return ResponseEntity.ok(new ResponseWrapper("User is successfully retrieved",user,HttpStatus.OK));
     }
 
-    @PostMapping()
-    public ResponseEntity<ResponseWrapper> createUser(@RequestBody UserDTO userDTO) {
-        userService.save(userDTO);
-        return ResponseEntity.ok(new ResponseWrapper("User added successfully", userDTO, HttpStatus.CREATED));
+    @PostMapping
+    public ResponseEntity<ResponseWrapper> createUser(@RequestBody UserDTO user){
+        userService.save(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper("User is successfully created",HttpStatus.CREATED));
     }
 
-    @PutMapping()
-    public ResponseEntity<ResponseWrapper> updateUser(@RequestBody UserDTO userDTO) {
-        userService.update(userDTO);
-        return ResponseEntity.ok(new ResponseWrapper("User updated successfully", HttpStatus.OK));
+    @PutMapping
+    public ResponseEntity<ResponseWrapper> updateUser(@RequestBody UserDTO user){
+        userService.update(user);
+        return ResponseEntity.ok(new ResponseWrapper("User is successfully updated",user,HttpStatus.OK));
     }
 
     @DeleteMapping("/{userName}")
-    public ResponseEntity<ResponseWrapper> deleteUser(@PathVariable("userName") String userName) {
+    public ResponseEntity<ResponseWrapper> deleteUser(@PathVariable("userName") String userName){
         userService.deleteByUserName(userName);
-        return ResponseEntity.ok(new ResponseWrapper("User deleted successfully", HttpStatus.OK));
+        return ResponseEntity.ok(new ResponseWrapper("User is successfully deleted",HttpStatus.OK));
+//        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ResponseWrapper("User is successfully created",HttpStatus.CREATED));
+
+        //204 - HttpStatus.NO_CONTENT
     }
 
 
