@@ -16,10 +16,13 @@ public class UserDTO {
     private String firstName;
     private String lastName;
     private String userName;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String passWord;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String confirmPassWord;
+
     private boolean enabled;
     private String phone;
     private RoleDTO role;
