@@ -5,6 +5,7 @@ import com.cydeo.entity.Project;
 import com.cydeo.entity.ResponseWrapper;
 import com.cydeo.service.ProjectService;
 import com.cydeo.service.UserService;
+import jakarta.annotation.security.RolesAllowed;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -21,45 +22,51 @@ public class ProjectController {
     ProjectService projectService;
 
     @GetMapping
-    public ResponseEntity<ResponseWrapper> getProjects(){
+    public ResponseEntity<ResponseWrapper> getProjects() {
         List<ProjectDTO> projectDTOList = projectService.listAllProjects();
-        return ResponseEntity.ok(new ResponseWrapper("Projects are successfully retrieved",projectDTOList, HttpStatus.OK));
+        return ResponseEntity.ok(new ResponseWrapper("Projects are successfully retrieved", projectDTOList, HttpStatus.OK));
     }
 
     @GetMapping("/{code}")
-    public ResponseEntity<ResponseWrapper> getProjectByCode(@PathVariable("code") String code){
+    @RolesAllowed({"Manager"})
+    public ResponseEntity<ResponseWrapper> getProjectByCode(@PathVariable("code") String code) {
         ProjectDTO projectDTO = projectService.getByProjectCode(code);
-        return ResponseEntity.ok(new ResponseWrapper("Project is successfully retrieved",projectDTO,HttpStatus.OK));
+        return ResponseEntity.ok(new ResponseWrapper("Project is successfully retrieved", projectDTO, HttpStatus.OK));
     }
 
     @PostMapping
-    public ResponseEntity<ResponseWrapper> createProject(@RequestBody ProjectDTO project){
+    @RolesAllowed({"Manager"})
+    public ResponseEntity<ResponseWrapper> createProject(@RequestBody ProjectDTO project) {
         projectService.save(project);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper("Project is successfully created",HttpStatus.CREATED));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper("Project is successfully created", HttpStatus.CREATED));
     }
 
     @PutMapping
-    public ResponseEntity<ResponseWrapper> updateProject(@RequestBody ProjectDTO project){
+    @RolesAllowed({"Manager"})
+    public ResponseEntity<ResponseWrapper> updateProject(@RequestBody ProjectDTO project) {
         projectService.update(project);
-        return ResponseEntity.ok(new ResponseWrapper("Project is successfully updated",project,HttpStatus.OK));
+        return ResponseEntity.ok(new ResponseWrapper("Project is successfully updated", project, HttpStatus.OK));
     }
 
+    @RolesAllowed({"Manager"})
     @DeleteMapping("/{projectCode}")
-    public ResponseEntity<ResponseWrapper> deleteProject(@PathVariable("projectCode") String code){
+    public ResponseEntity<ResponseWrapper> deleteProject(@PathVariable("projectCode") String code) {
         projectService.delete(code);
-        return ResponseEntity.ok(new ResponseWrapper("Project is successfully deleted",HttpStatus.OK));
+        return ResponseEntity.ok(new ResponseWrapper("Project is successfully deleted", HttpStatus.OK));
     }
 
+    @RolesAllowed({"Manager"})
     @GetMapping("/manager/project-status")
-    public ResponseEntity<ResponseWrapper> getProjectByManager(){
+    public ResponseEntity<ResponseWrapper> getProjectByManager() {
         List<ProjectDTO> projects = projectService.listAllProjectDetails();
-        return ResponseEntity.ok(new ResponseWrapper("Projects are successfully retrieved",projects, HttpStatus.OK));
+        return ResponseEntity.ok(new ResponseWrapper("Projects are successfully retrieved", projects, HttpStatus.OK));
     }
 
+    @RolesAllowed({"Manager"})
     @PutMapping("/manager/complete/{projectCode}")
-    public ResponseEntity<ResponseWrapper> managerCompleteProject(@PathVariable("projectCode") String code){
+    public ResponseEntity<ResponseWrapper> managerCompleteProject(@PathVariable("projectCode") String code) {
         projectService.complete(code);
-        return ResponseEntity.ok(new ResponseWrapper("Project is successfully completed",HttpStatus.OK));
+        return ResponseEntity.ok(new ResponseWrapper("Project is successfully completed", HttpStatus.OK));
     }
 
 }
